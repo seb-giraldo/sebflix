@@ -7,11 +7,10 @@
 .landing {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0 32px;
+  justify-content: space-between;
+  padding: 0 128px;
   height: 50vh;
   width: 1300px;
-  margin-left: 64px;
 }
 
 .landing__img--wrapper {
@@ -45,4 +44,35 @@
   letter-spacing: 0.5px;
   background-color: #e8b573;
   border-radius: 50px;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.landing__info {
+  animation: fadeInLeft 0.8s ease-out forwards;
+}
+
+.landing__img--wrapper {
+  animation: fadeInRight 0.8s ease-out forwards;
+  opacity: 0;
 }

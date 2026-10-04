@@ -10,18 +10,18 @@ import { useState, useEffect } from "react";
 import fakeSearch from "../assets/fake-search.json";
 import fakeInfo from "../assets/fake-movie-info.json";
 import { useSearchParams } from "react-router-dom";
-import { API_KEY } from "../assets/OMDB_API_KEY.js";
 import axios from "axios";
 import convertRating from "../Components/convertRating.jsx";
 import popcorn from "/popcorn.png";
 
 function Search() {
+  const API_KEY = import.meta.env.VITE_API_KEY;
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search_query");
   const sortRef = useRef("placeholder");
-  const [isUnavailable, setIsUnavailable] = useState(false);
+  const [failedPosters, setFailedPosters] = useState(new Set());
 
   async function fetchSearchData() {
     if (!searchQuery) {
@@ -55,16 +55,20 @@ function Search() {
   }
 
   useEffect(() => {
-    setIsUnavailable(false);
+    setFailedPosters(new Set());
     setLoading(true);
     fetchSearchData();
-
-    const timer = setTimeout(() => {
-      setIsUnavailable(true);
-    }, 900);
-
-    return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  const handlePosterError = (imdbID) => {
+    setFailedPosters((prev) => new Set([...prev, imdbID]));
+  };
+
+  const handlePosterLoad = (e, imdbID) => {
+    if (e.target.width === 0 || e.target.height === 0) {
+      handlePosterError(imdbID);
+    }
+  };
 
   function sortBy(data) {
     const value = sortRef.current.value;
@@ -119,7 +123,7 @@ function Search() {
           </div>
           <div className="cards-container">
             <div className="cards">
-              {(loading === true && searchQuery)
+              {loading === true && searchQuery
                 ? new Array(8).fill(1).map((e) => (
                     <div className="loading--wrapper" key={e}>
                       <div className="card--loading">
@@ -154,9 +158,12 @@ function Search() {
                           src={movie.Poster}
                           alt=""
                           className="search-poster"
+                          onError={() => handlePosterError(movie.imdbID)}
+                          onLoad={(e) => handlePosterLoad(e, movie.imdbID)}
                         />
 
-                        {isUnavailable && (
+                        {(movie.Poster === "N/A" ||
+                          failedPosters.has(movie.imdbID)) && (
                           <div className="poster-unavailable">
                             <span className="unavailable--text">
                               Poster Unavailable!
@@ -186,7 +193,9 @@ function Search() {
                           </div>
                           <div className="rating card__item">
                             <b>IMDb Rating:</b> &nbsp;
-                            <span className="stars">{convertRating(movie.imdbRating)}</span>
+                            <span className="stars">
+                              {convertRating(movie.imdbRating)}
+                            </span>
                           </div>
                         </div>
                       </div>

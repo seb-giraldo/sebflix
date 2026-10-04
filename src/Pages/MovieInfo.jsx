@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { API_KEY } from "../assets/OMDB_API_KEY";
 import { useParams } from "react-router-dom";
 import "./MovieInfo.css";
 import fresh from "/fresh.png";
 import rotten from "/rotten.png";
 import metacritic from "/metacritic.png";
 import imdb from "/imdb.png";
+import filmReel from "/film-reel.png";
 
 function MovieInfo() {
+  const API_KEY = import.meta.env.VITE_API_KEY;
   const [movie, setMovie] = useState({});
+  const [posterFailed, setPosterFailed] = useState(false);
   const { imdbId } = useParams();
 
   async function fetchMovie() {
@@ -20,8 +22,19 @@ function MovieInfo() {
   }
 
   useEffect(() => {
+    setPosterFailed(false);
     fetchMovie();
   }, [imdbId]);
+
+  const handlePosterError = () => {
+    setPosterFailed(true);
+  };
+
+  const handlePosterLoad = (e) => {
+    if (e.target.width === 0 || e.target.height === 0) {
+      setPosterFailed(true);
+    }
+  };
 
   return (
     <div>
@@ -29,7 +42,25 @@ function MovieInfo() {
         <div className="row">
           <div className="movie-card">
             <figure className="poster--wrapper">
-              <img src={movie.Poster} alt="" className="poster" />
+              <img
+                src={movie.Poster}
+                alt=""
+                className="poster"
+                onError={handlePosterError}
+                onLoad={handlePosterLoad}
+              />
+              {(movie.Poster === "N/A" || posterFailed) && (
+                <div className="poster-unavailable">
+                  <span className="unavailable--text">
+                    Poster Unavailable!
+                  </span>
+                  <img
+                    src={filmReel}
+                    alt=""
+                    className="unavailable--img"
+                  />
+                </div>
+              )}
             </figure>
             <div className="movie__info">
               <div className="movie__info--col">
@@ -90,9 +121,17 @@ function MovieInfo() {
               {movie.Ratings?.[1] && (
                 <div className="tomatoes rating">
                   {movie.Ratings[1].Value >= "60" ? (
-                    <img className="rating-icon info__item" src={fresh} alt="" />
+                    <img
+                      className="rating-icon info__item"
+                      src={fresh}
+                      alt=""
+                    />
                   ) : (
-                    <img className="rating-icon info__item" src={rotten} alt="" />
+                    <img
+                      className="rating-icon info__item"
+                      src={rotten}
+                      alt=""
+                    />
                   )}
                   <div className="rating__text info__item">
                     <b>Rotten Tomatoes: &nbsp;</b>
@@ -103,7 +142,11 @@ function MovieInfo() {
 
               {movie.Ratings?.[2] && (
                 <div className="metacritic rating">
-                  <img className="rating-icon info__item" src={metacritic} alt="" />
+                  <img
+                    className="rating-icon info__item"
+                    src={metacritic}
+                    alt=""
+                  />
                   <div className="rating__text info__item">
                     <b>Metacritic: &nbsp;</b> {movie.Ratings[2].Value}
                   </div>

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { API_KEY } from "../assets/OMDB_API_KEY";
-import { RANDOM_KEY } from "../assets/RANDOM_KEY";
 import "./Home.css";
 import "../App.css";
 import { Navigate, useNavigate } from "react-router-dom";
 
 function Home() {
+  const API_KEY = import.meta.env.VITE_API_KEY;
+  const RANDOM_KEY = import.meta.env.VITE_RANDOM_KEY;
   const navigate = useNavigate();
   const [poster, setPoster] = useState("");
 
@@ -60,25 +60,25 @@ function Home() {
     <>
       <div className="container landing-container">
         <div className="row">
-          {poster && (
-            <div className="landing">
-              <div className="landing__info">
-                <h1 className="landing__info--title">
-                  Your #1 source for all{" "}
-                  <span className="text--accent">film information.</span>
-                </h1>
-                <button
-                  className="landing__info--btn"
-                  onClick={() => navigate("/results")}
-                >
-                  Browse Now
-                </button>
-              </div>
+          <div className="landing">
+            <div className="landing__info">
+              <h1 className="landing__info--title">
+                Your #1 source for all{" "}
+                <span className="text--accent">film information.</span>
+              </h1>
+              <button
+                className="landing__info--btn"
+                onClick={() => navigate("/results")}
+              >
+                Browse Now
+              </button>
+            </div>
+            {poster && (
               <figure className="landing__img--wrapper">
                 <img src={poster} alt="" className="landing__img" />
               </figure>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </>
