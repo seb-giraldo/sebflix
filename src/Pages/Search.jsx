@@ -55,6 +55,14 @@ function Search() {
   }
 
   useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = popcorn;
+    document.head.appendChild(link);
+  }, []);
+
+  useEffect(() => {
     setFailedPosters(new Set());
     setLoading(true);
     fetchSearchData();
