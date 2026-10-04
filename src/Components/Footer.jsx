@@ -16,7 +16,7 @@ function Footer() {
             </Link>
             <div className="footer-header__links">
               <Link to="/">Home</Link>
-              <Link to="/">Contact</Link>
+              <Link to="/" className="disabled-link">Contact</Link>
             </div>
             <div className="copyright">
               © 2026 Sebastian Giraldo. All rights reserved.

@@ -33,8 +33,8 @@ function Navbar() {
               </Link>
               <div className="nav-header__links">
                 <Link to="/">Home</Link>
-                <Link to="/">Favorites</Link>
-                <button className="nav-header__links--btn">Contact</button>
+                <Link to="/" className="disabled-link">Favorites</Link>
+                <button className="nav-header__links--btn disabled-link">Contact</button>
               </div>
             </div>
             <div className="nav-footer">

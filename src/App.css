@@ -81,6 +81,10 @@ button:active {
   color: rgb(232, 181, 115);
 }
 
+.disabled-link {
+  cursor: not-allowed;
+}
+
 @media (max-width: 1200px) {
   .landing {
     width: 800px !important;
@@ -207,7 +211,7 @@ button:active {
   }
 
   .loading--wrapper {
-    width: calc(100% / 2) !important;
+    width: calc((100% - 8px) / 2) !important;
   }
 
   .hover-desc {
@@ -319,6 +323,7 @@ button:active {
 
   .card__info {
     display: flex;
+    flex-direction: column;
     margin: 16px 0 0 0;
     padding: 0;
     width: 100% !important;
