@@ -1,16 +1,86 @@
-# React + Vite
+# Sebflix
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sebflix is a movie-browsing web app built with React and Vite. Search for movie titles, sort matching results, and open a movie to see its details and ratings.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Search movies by title.
+- Sort results alphabetically or by IMDb rating.
+- View movie details, including the plot, cast, credits, and available ratings.
+- Show a randomly selected movie poster on the home page.
+- Display a fallback when a movie poster is unavailable.
 
-## React Compiler
+## Requirements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js and npm
+- An [OMDb API key](https://www.omdbapi.com/apikey.aspx)
+- A [RapidAPI key](https://rapidapi.com/) with access to the [Random Movie API](https://rapidapi.com/sathishluvsatz/api/random-movie-api2) for the home-page poster feature
 
-## Expanding the ESLint configuration
+## Getting started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone the repository and open its directory:
+
+   ```sh
+   git clone https://github.com/seb-giraldo/sebflix.git
+   cd sebflix
+   ```
+
+2. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+3. Create a `.env` file in the project root and add your API keys:
+
+   ```env
+   VITE_API_KEY=your_omdb_api_key
+   VITE_RANDOM_KEY=your_rapidapi_key
+   ```
+
+4. Start the development server:
+
+   ```sh
+   npm run dev
+   ```
+
+   Open the local URL printed by Vite in your browser.
+
+The app uses OMDb for title searches and movie details. The home page also uses Random Movie API through RapidAPI to select a movie whose poster is fetched from OMDb.
+
+## Available scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the Vite development server. |
+| `npm run build` | Build the app for production in `dist/`. |
+| `npm run preview` | Preview the production build locally. |
+| `npm run lint` | Run ESLint. |
+
+## Routes
+
+| Route | Description |
+| --- | --- |
+| `/` | Home page with a randomly selected movie poster. |
+| `/results?search_query=<title>` | Search results for the supplied title. |
+| `/movie/:imdbId` | Details for a movie identified by its IMDb ID. |
+
+Use the search field in the navigation bar to start a search. Select a result to open its detail page.
+
+## Project structure
+
+```text
+src/
+├── Components/   # Navigation, footer, and rating helpers
+├── Pages/        # Home, search results, and movie detail pages
+├── assets/       # Local images and sample movie data
+├── App.jsx       # Routes and shared page layout
+└── main.jsx      # React application entry point
+public/           # Images used throughout the app
+```
+
+## Notes
+
+- `VITE_` environment variables are included in client-side code by Vite. Do not use privileged or secret credentials in this app; restrict API keys with the providers' available usage limits and restrictions.
+- Searches and movie details depend on OMDb availability and its API limits. The randomly selected home-page poster also depends on the Random Movie API.
+- Favorites and Contact are currently non-functional navigation items.
